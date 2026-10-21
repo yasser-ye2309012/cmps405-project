@@ -1,0 +1,8 @@
+# Copy to config.txt (git-ignored) and fill in. NEVER commit config.txt.
+ALPHA_IP=
+BETA_IP=
+ALPHA_HOST=alpha
+BETA_HOST=beta
+TEST_USER=user1
+# Password is shared privately (chat), not in the repo
+ADMIN_EMAIL=

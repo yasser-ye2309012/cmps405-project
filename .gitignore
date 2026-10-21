@@ -1,0 +1,4 @@
+config.txt
+*.swp
+*~
+*.pcap
