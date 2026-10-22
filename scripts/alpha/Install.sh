@@ -70,8 +70,8 @@ done
 
 echo
 echo "===== Finished with $errors failed step(s) ====="
-echo "===== Contents of $LOG ====="
-cat "$LOG"
+echo "===== Last 20 lines of $LOG (full file: $LOG) ====="
+tail -n 20 "$LOG"
 
 # Exit code 1 if anything failed, 0 if everything worked
 [ "$errors" -eq 0 ]
