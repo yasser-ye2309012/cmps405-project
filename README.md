@@ -9,7 +9,7 @@ Private group repository. Do not make this repository public (copying/plagiarism
 | 1 | Yasser ElMokadem | 202309012 | yasser-ye2309012 | [01] repo, [02] VMs and network, [03] `Users.sh`, [04] `Install.sh`, [05] `Connectivity.sh` |
 | 2 | Mohammed Alhusali | 202212621 | mohammed-ma2212621 | [07] `SysInfo.sh`, [10] `Search.sh`, [11] `Network.sh`, [16] QA, [17] Word report, [18] submission |
 | 3 | Khaled Elrefaey | 202309917 | horder6947 | [12]-[13] `FileSystem.sh`, [14]-[15] C program |
-| 4 | | | | [06] `LogServer.sh`, [08] `LogClient.sh`, [09] `Remote.sh` |
+| 4 | Huthaifa Rajha | hr2308103 | Hraj7a | [06] `LogServer.sh`, [08] `LogClient.sh`, [09] `Remote.sh` |
 
 All members: [19] demo rehearsal. Section number: ______
 
