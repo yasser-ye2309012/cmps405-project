@@ -1,0 +1,98 @@
+===== Network report - Thu Oct 29 12:14:22 AM +03 2026 =====
+
+===== 0. Checking the network tools =====
+ifconfig is already installed
+route is already installed
+nslookup is already installed
+traceroute is already installed
+
+===== 1. Network configuration (ifconfig) =====
+ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.153.10  netmask 255.255.255.0  broadcast 192.168.153.255
+        inet6 fe80::20c:29ff:fe12:3f3e  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:12:3f:3e  txqueuelen 1000  (Ethernet)
+        RX packets 26636  bytes 10521476 (10.5 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 5315  bytes 543131 (543.1 KB)
+        TX errors 0  dropped 26 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 2968  bytes 281750 (281.7 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2968  bytes 281750 (281.7 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+===== 2. Routing table (route -n) =====
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.153.2   0.0.0.0         UG    20100  0        0 ens33
+0.0.0.0         192.168.0.1     0.0.0.0         UG    20100  0        0 ens33
+192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 ens33
+192.168.153.0   0.0.0.0         255.255.255.0   U     100    0        0 ens33
+
+===== 3. Host name =====
+alpha
+
+===== 4. Local DNS server =====
+--- DNS server used by this machine (/etc/resolv.conf) ---
+# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8).
+# Do not edit.
+#
+# This file might be symlinked as /etc/resolv.conf. If you're looking at
+# /etc/resolv.conf and seeing this text, you have followed the symlink.
+#
+# This is a dynamic resolv.conf file for connecting local clients to the
+# internal DNS stub resolver of systemd-resolved. This file lists all
+# configured search domains.
+#
+# Run "resolvectl status" to see details about the uplink DNS servers
+# currently in use.
+#
+# Third party programs should typically not access this file directly, but only
+# through the symlink at /etc/resolv.conf. To manage man:resolv.conf(5) in a
+# different way, replace this symlink by a static file or a different symlink.
+#
+# See man:systemd-resolved.service(8) for details about the supported modes of
+# operation for /etc/resolv.conf.
+
+nameserver 127.0.0.53
+options edns0 trust-ad
+search .
+--- Asking the DNS server for google.com (nslookup) ---
+Server:		127.0.0.53
+Address:	127.0.0.53#53
+
+Non-authoritative answer:
+Name:	google.com
+Address: 142.250.201.238
+Name:	google.com
+Address: 2a00:1450:4019:811::200e
+
+
+===== 5. Route to google.com (traceroute) =====
+traceroute to google.com (142.250.187.78), 15 hops max, 60 byte packets
+ 1  _gateway (192.168.0.1)  2.323 ms  6.948 ms  6.881 ms
+ 2  192.168.100.1 (192.168.100.1)  6.826 ms  6.775 ms  6.723 ms
+ 3  78.100.225.1 (78.100.225.1)  13.260 ms  13.210 ms  13.146 ms
+ 4  eth-tr66-ktc-coro-9k.qatar.net.qa (89.211.4.249)  7.669 ms  7.618 ms  7.568 ms
+ 5  be-10-ktc-gw1-ncs5k.qatar.net.qa (89.211.0.145)  7.504 ms  7.453 ms  7.371 ms
+ 6  82.148.106.149 (82.148.106.149)  17.932 ms  16.158 ms  16.667 ms
+ 7  pnfjra-ao-in-f14.1e100.net (142.250.187.78)  16.536 ms  16.473 ms  18.532 ms
+
+===== 6. Ping google.com (4 packets) =====
+PING google.com (142.250.187.78) 56(84) bytes of data.
+64 bytes from pnfjra-ao-in-f14.1e100.net (142.250.187.78): icmp_seq=1 ttl=117 time=16.8 ms
+64 bytes from pnfjra-ao-in-f14.1e100.net (142.250.187.78): icmp_seq=2 ttl=117 time=16.8 ms
+64 bytes from pnfjra-ao-in-f14.1e100.net (142.250.187.78): icmp_seq=3 ttl=117 time=17.0 ms
+64 bytes from pnfjra-ao-in-f14.1e100.net (142.250.187.78): icmp_seq=4 ttl=117 time=16.3 ms
+
+--- google.com ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3005ms
+rtt min/avg/max/mdev = 16.292/16.736/16.968/0.261 ms
+RESULT: google.com is reachable
+
+===== End of the report =====
