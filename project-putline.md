@@ -96,12 +96,12 @@ Write one script that contains three subroutines (functions):
 
     - Create /tmp/cpu_info.txt containing ONLY the CPU specification of the running system (Architecture, # of CPUs, Model name, Vendor ID).
 
-    - Save the kernel output related to memory and hard disk ONLY into /tmpMessages_Log.txt. [Note: access to kernel messages is restricted on Ubuntu 2604 — use elevated privileges, or read /var/log/kern.log once the logging service of Task 6 is installed].
+    - Save the kernel output related to memory and hard disk ONLY into /tmp/Messages_Log.txt. [Note: access to kernel messages is restricted on Ubuntu 2604 — use elevated privileges, or read /var/log/kern.log once the logging service of Task 6 is installed].
 
     - Create /tmp/Message_count.txt showing the total word count of the memorylines and of the hard disk lines taken from /tmp/Messages_Log.txt.
 
     - Add the three files to a compressed tar file called Phase1.tar.bz2 and copy it to a directory whose name is the time of the backup (example: 30055503 → day 30, hour 05, minute 55, second 03).
-    
+
 - Second subroutine – check all the files in your home directory for the following: 
 
     - Files with read and execute permissions for the owner only: make a copy of the file and redirect that copy to a backup directory. [Note: the directory name must be the date and time of the backup, example 260929055503 → year 26, month 09, day 29, hour 05, minute 55, second 03]. 
