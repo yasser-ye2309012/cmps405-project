@@ -1,0 +1,212 @@
+==================================================
+ LogClient setup started: Fri Oct 30 07:23:06 PM +03 2026  on beta
+==================================================
+
+---------- [1] Install and enable rsyslog ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+rsyslog is already the newest version (8.2512.0-1ubuntu4.2).
+rsyslog set to manually installed.
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+
+---------- [2] Forward all logs to ALPHA (192.168.134.10:514 over TCP) ----------
+Wrote /etc/rsyslog.d/90-forward-to-alpha.conf:
+# Managed by LogClient.sh - forward everything to ALPHA (task)
+
+# Ensure the working directory for disk-assisted queues exists and is explicitly defined
+global(workDirectory="/var/spool/rsyslog")
+
+*.* action(type="omfwd" target="192.168.134.10" port="514" protocol="tcp"
+           queue.type="LinkedList" queue.filename="fwd_alpha"
+           queue.maxDiskSpace="100m" queue.saveOnShutdown="on"
+           action.resumeRetryCount="-1")
+Validating rsyslog configuration...
+rsyslogd: version 8.2512.0, config validation run (level 1), master config /etc/rsyslog.conf
+rsyslogd: End of config validation run. Bye.
+rsyslog: active
+
+---------- [3] Check ALPHA is reachable on TCP 514 ----------
+WARNING: cannot reach 192.168.134.10:514 (is LogServer.sh done on ALPHA?)
+
+---------- [4] Send a test message ----------
+Sent: 'LogClientTest-1793377405 test message from beta'
+Verify on ALPHA with:
+  sudo grep LogClientTest-1793377405 /var/log/remote/beta/beta.log
+
+==================================================
+ LogClient setup finished: Fri Oct 30 07:23:25 PM +03 2026
+==================================================
+==================================================
+ LogClient setup started: Fri Oct 30 07:29:45 PM +03 2026  on beta
+==================================================
+
+---------- [1] Install and enable rsyslog ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+rsyslog is already the newest version (8.2512.0-1ubuntu4.2).
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+
+---------- [2] Forward all logs to ALPHA (192.168.153.10:514 over TCP) ----------
+Wrote /etc/rsyslog.d/90-forward-to-alpha.conf:
+# Managed by LogClient.sh - forward everything to ALPHA (task)
+
+# Ensure the working directory for disk-assisted queues exists and is explicitly defined
+global(workDirectory="/var/spool/rsyslog")
+
+*.* action(type="omfwd" target="192.168.153.10" port="514" protocol="tcp"
+           queue.type="LinkedList" queue.filename="fwd_alpha"
+           queue.maxDiskSpace="100m" queue.saveOnShutdown="on"
+           action.resumeRetryCount="-1")
+Validating rsyslog configuration...
+rsyslogd: version 8.2512.0, config validation run (level 1), master config /etc/rsyslog.conf
+rsyslogd: End of config validation run. Bye.
+rsyslog: active
+
+---------- [3] Check ALPHA is reachable on TCP 514 ----------
+OK: 192.168.153.10:514 is reachable
+
+---------- [4] Send a test message ----------
+Sent: 'LogClientTest-1793377789 test message from beta'
+Verify on ALPHA with:
+  sudo grep LogClientTest-1793377789 /var/log/remote/beta/beta.log
+
+==================================================
+ LogClient setup finished: Fri Oct 30 07:29:49 PM +03 2026
+==================================================
+==================================================
+ LogClient setup started: Fri Oct 30 07:48:01 PM +03 2026  on beta
+==================================================
+
+---------- [0a] Check ALPHA is reachable on TCP 514 (must pass before anything else) ----------
+OK: 192.168.153.10:514 is reachable
+
+---------- [0b] Set a clear hostname for BETA ----------
+Hostname is now: beta
+
+---------- [1] Install and enable rsyslog ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+rsyslog is already the newest version (8.2512.0-1ubuntu4.2).
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+
+---------- [2] Forward all logs to ALPHA (192.168.153.10:514 over TCP) ----------
+Wrote /etc/rsyslog.d/90-forward-to-alpha.conf:
+# Managed by LogClient.sh - forward everything to ALPHA (task)
+
+# Ensure the working directory for disk-assisted queues exists and is explicitly defined
+global(workDirectory="/var/spool/rsyslog")
+
+*.* action(type="omfwd" target="192.168.153.10" port="514" protocol="tcp"
+           queue.type="LinkedList" queue.filename="fwd_alpha"
+           queue.maxDiskSpace="100m" queue.saveOnShutdown="on"
+           action.resumeRetryCount="-1")
+Validating rsyslog configuration...
+rsyslogd: version 8.2512.0, config validation run (level 1), master config /etc/rsyslog.conf
+rsyslogd: End of config validation run. Bye.
+rsyslog: active
+
+---------- [3] Check ALPHA is reachable on TCP 514 ----------
+OK: 192.168.153.10:514 is reachable
+
+---------- [4] Send a test message ----------
+Sent: 'LogClientTest-1793378885 test message from beta'
+Verify on ALPHA with:
+  sudo grep LogClientTest-1793378885 /var/log/remote/beta/beta.log
+
+---------- [5] Generate the remaining test events on BETA ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+openssh-server is already the newest version (1:10.2p1-2ubuntu3.8).
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+Synchronizing state of ssh.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable ssh
+Event 1 (sudo) sent: sudo echo sudo-event-LogClientTest-1793378885
+Event 3 (logger) already sent in step 4: LogClientTest-1793378885
+
+Event 2 (failed SSH login INTO BETA) - run this on ALPHA with a wrong user/password:
+  ssh wronguser@192.168.153.11
+
+Then verify all three events on ALPHA with:
+  sudo grep -E "LogClientTest-1793378885|sshd" /var/log/remote/beta/beta.log
+
+==================================================
+ LogClient setup finished: Fri Oct 30 07:48:07 PM +03 2026
+==================================================
+==================================================
+ LogClient setup started: Fri Oct 30 07:49:44 PM +03 2026  on beta
+==================================================
+
+---------- [0a] Check ALPHA is reachable on TCP 514 (must pass before anything else) ----------
+ERROR: cannot reach ALPHA at 192.168.153.10:514.
+       Make sure LogServer.sh was run on ALPHA and that rsyslog and the firewall allow port 514 from BETA.
+==================================================
+ LogClient setup started: Fri Oct 30 07:51:18 PM +03 2026  on beta
+==================================================
+
+---------- [0a] Check ALPHA is reachable on TCP 514 (must pass before anything else) ----------
+OK: 192.168.153.10:514 is reachable
+
+---------- [0b] Set a clear hostname for BETA ----------
+Hostname is now: beta
+
+---------- [1] Install and enable rsyslog ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+rsyslog is already the newest version (8.2512.0-1ubuntu4.2).
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+
+---------- [2] Forward all logs to ALPHA (192.168.153.10:514 over TCP) ----------
+Wrote /etc/rsyslog.d/90-forward-to-alpha.conf:
+# Managed by LogClient.sh - forward everything to ALPHA (task)
+
+# Ensure the working directory for disk-assisted queues exists and is explicitly defined
+global(workDirectory="/var/spool/rsyslog")
+
+*.* action(type="omfwd" target="192.168.153.10" port="514" protocol="tcp"
+           queue.type="LinkedList" queue.filename="fwd_alpha"
+           queue.maxDiskSpace="100m" queue.saveOnShutdown="on"
+           action.resumeRetryCount="-1")
+Validating rsyslog configuration...
+rsyslogd: version 8.2512.0, config validation run (level 1), master config /etc/rsyslog.conf
+rsyslogd: End of config validation run. Bye.
+rsyslog: active
+
+---------- [3] Check ALPHA is reachable on TCP 514 ----------
+OK: 192.168.153.10:514 is reachable
+
+---------- [4] Send a test message ----------
+Sent: 'LogClientTest-1793379081 test message from beta'
+Verify on ALPHA with:
+  sudo grep LogClientTest-1793379081 /var/log/remote/beta/beta.log
+
+---------- [5] Generate the remaining test events on BETA ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+openssh-server is already the newest version (1:10.2p1-2ubuntu3.8).
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+Synchronizing state of ssh.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable ssh
+Event 1 (sudo) sent: sudo echo sudo-event-LogClientTest-1793379081
+Event 3 (logger) already sent in step 4: LogClientTest-1793379081
+
+Event 2 (failed SSH login INTO BETA) - run this on ALPHA with a wrong user/password:
+  ssh wronguser@192.168.153.11
+
+Then verify all three events on ALPHA with:
+  sudo grep -E "LogClientTest-1793379081|sshd" /var/log/remote/beta/beta.log
+
+==================================================
+ LogClient setup finished: Fri Oct 30 07:51:23 PM +03 2026
+==================================================
