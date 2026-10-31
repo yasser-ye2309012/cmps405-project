@@ -3,14 +3,14 @@
 # LogServer.sh  -  CMPS 405 Project, Task [06] (Member 4)
 # Purpose : Configure ALPHA as the central syslog server that collects
 #           logs from BETA over UDP/TCP port 514.
-# Run on  : ALPHA (192.168.134.10)   as root:  sudo ./LogServer.sh
+# Run on  : ALPHA (192.168.153.10)   as root:  sudo ./LogServer.sh [BETA_IP]
 # Output  : everything printed is also appended to
 #           /var/log/logserver_setup.log
 # Safe to run more than once (idempotent): config files are rewritten
 # with the same content and ufw skips rules that already exist.
 # =====================================================================
 # ---------- Settings ---------
-BETA_IP="192.168.134.11"                       # only this client may send logs
+BETA_IP="${1:-192.168.153.11}"                 # only this client may send logs
 LOG_PORT=514                                   # standard syslog port
 REMOTE_DIR="/var/log/remote"                   # where remote logs are stored
 RSYSLOG_CONF="/etc/rsyslog.d/10-remote.conf"   # our rsyslog config file

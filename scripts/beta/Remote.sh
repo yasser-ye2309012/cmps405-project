@@ -4,7 +4,7 @@
 # Purpose : From BETA, set up password-less SSH/SFTP to user1@alpha,
 #           run a remote command, download ALPHA's index.html, and
 #           upload the sysinfo report to ALPHA with SFTP (batch mode).
-# Run on  : BETA (192.168.134.11) as a NORMAL user (NOT sudo):
+# Run on  : BETA (192.168.153.11) as a NORMAL user (NOT sudo):
 #              ./Remote.sh
 #           Optionally pass the path of the sysinfo report:
 #              ./Remote.sh ~/sysinfo_report.txt

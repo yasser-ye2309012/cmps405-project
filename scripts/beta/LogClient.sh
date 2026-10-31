@@ -3,12 +3,12 @@
 # LogClient.sh  -  CMPS 405 Project, Task [08] (Member 4)
 # Purpose : Configure BETA to forward all of its syslog messages to the
 #           central log server on ALPHA (set up by [06] LogServer.sh).
-# Run on  : BETA (192.168.153.11)  as root:  sudo ./LogClient.sh
+# Run on  : BETA (192.168.153.11)  as root:  sudo ./LogClient.sh [ALPHA_IP]
 # Output  : printed to screen and appended to /var/log/logclient_setup.log
 # Safe to run more than once (config file is rewritten each time).
 # =====================================================================
 # ---------- Settings ---------
-SERVER_IP="192.168.153.10"                      # ALPHA
+SERVER_IP="${1:-192.168.153.10}"                      # ALPHA
 LOG_PORT=514
 FWD_CONF="/etc/rsyslog.d/90-forward-to-alpha.conf"
 SETUP_LOG="/var/log/logclient_setup.log"
