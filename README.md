@@ -17,8 +17,8 @@ All members: [19] demo rehearsal. Section number: ______
 
 | VM | Hostname | Role | IP |
 |---|---|---|---|
-| VM1 | `alpha` | Server: users, SSH, MySQL, FTP, Apache, log server | 192.169.153.10 |
-| VM2 | `beta` | Client: connectivity, remote access, reporting, log forwarding | 192.169.153.11 |
+| VM1 | `alpha` | Server: users, SSH, MySQL, FTP, Apache, log server | 192.168.153.10 |
+| VM2 | `beta` | Client: connectivity, remote access, reporting, log forwarding | 192.168.153.11 |
 
 Both are Ubuntu 26.04 LTS Desktop. Real IPs and credentials go in `config.txt` (local only, git-ignored). Copy `config.example.txt` to `config.txt` and fill it in.
 
