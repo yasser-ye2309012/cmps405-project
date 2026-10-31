@@ -1,0 +1,269 @@
+==================================================
+ LogServer setup started: Fri Oct 30 06:12:19 PM +03 2026
+ Host: alpha
+==================================================
+
+---------- [1] Install rsyslog, ufw and logrotate ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+rsyslog is already the newest version (8.2512.0-1ubuntu4.2).
+rsyslog set to manually installed.
+ufw is already the newest version (0.36.2-9build1).
+ufw set to manually installed.
+logrotate is already the newest version (3.22.0-1build1).
+logrotate set to manually installed.
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+
+---------- [2] Create directory for remote logs: /var/log/remote ----------
+drwxr-xr-x 2 syslog adm 4096 Oct 30 18:12 /var/log/remote
+
+---------- [3] Configure rsyslog to listen on UDP and TCP port 514 ----------
+Wrote /etc/rsyslog.d/10-remote.conf:
+# Managed by LogServer.sh - central log server (task)
+module(load="imudp")
+module(load="imtcp")
+input(type="imudp" port="514" ruleset="remote")
+input(type="imtcp" port="514" ruleset="remote")
+# One folder and one file per sending host
+template(name="RemotePerHost" type="string"
+         string="/var/log/remote/%HOSTNAME%/%HOSTNAME%.log")
+ruleset(name="remote") {
+    action(type="omfile" dynaFile="RemotePerHost"
+           createDirs="on" dirCreateMode="0755"
+           fileCreateMode="0640" fileOwner="syslog" fileGroup="adm")
+    stop
+}
+Validating rsyslog configuration...
+rsyslogd: version 8.2512.0, config validation run (level 1), master config /etc/rsyslog.conf
+rsyslogd: End of config validation run. Bye.
+active
+
+---------- [4] Configure UFW firewall ----------
+Rules updated
+Rules updated (v6)
+Rules updated
+Rules updated
+Rules updated
+Rules updated
+Rules updated (v6)
+Firewall is active and enabled on system startup
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW IN    Anywhere                   # SSH
+514/udp                    ALLOW IN    192.168.153.11             # syslog UDP from BETA
+514/tcp                    ALLOW IN    192.168.153.11             # syslog TCP from BETA
+514                        ALLOW IN    127.0.0.1                  # Local loopback test traffic
+80/tcp                     ALLOW IN    Anywhere                   # HTTP
+22/tcp (v6)                ALLOW IN    Anywhere (v6)              # SSH
+80/tcp (v6)                ALLOW IN    Anywhere (v6)              # HTTP
+
+
+---------- [5] Verify rsyslog is listening on port 514 ----------
+udp   UNCONN 0      0                               0.0.0.0:514        0.0.0.0:*    users:(("rsyslogd",pid=5494,fd=6))                     
+udp   UNCONN 0      0                                  [::]:514           [::]:*    users:(("rsyslogd",pid=5494,fd=7))                     
+tcp   LISTEN 0      25                              0.0.0.0:514        0.0.0.0:*    users:(("rsyslogd",pid=5494,fd=8))                     
+tcp   LISTEN 0      25                                 [::]:514           [::]:*    users:(("rsyslogd",pid=5494,fd=9))                     
+OK: rsyslog is listening on port 514
+
+---------- [6] Test with logger (send to ourselves over the network) ----------
+OK: test messages written to /var/log/remote/alpha/alpha.log
+2026-10-30T18:12:55.270389+03:00 alpha root LogServerTest-1793373175 UDP test message from alpha
+2026-10-30T18:12:55.275294+03:00 alpha root LogServerTest-1793373175 TCP test message from alpha
+Current contents of /var/log/remote:
+/var/log/remote:
+total 4
+drwxr-xr-x 2 syslog syslog 4096 Oct 30 18:12 alpha
+
+/var/log/remote/alpha:
+total 4
+-rw-r----- 1 syslog adm 194 Oct 30 18:12 alpha.log
+
+---------- [7] Configure log rotation: /etc/logrotate.d/remote ----------
+Wrote /etc/logrotate.d/remote:
+# Managed by LogServer.sh - rotation for remote host logs
+/var/log/remote/*/*.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    su syslog adm
+    create 0640 syslog adm
+    sharedscripts
+    # Postrotate block must reside INSIDE the closing brace of the directive block
+    # otherwise logrotate throws a syntax error and fails to reload rsyslog.
+    postrotate
+        /usr/lib/rsyslog/rsyslog-rotate 2>/dev/null || systemctl kill -s HUP rsyslog.service
+    endscript
+}
+Checking logrotate configuration (dry run)...
+Creating new state
+Creating new state
+Creating new state
+
+Handling 1 logs
+
+rotating pattern: /var/log/remote/*/*.log after 1 days empty log files are not rotated, (7 rotations), old logs are removed
+switching euid from 0 to 100 and egid from 0 to 4 (pid 5743)
+considering log /var/log/remote/alpha/alpha.log
+Creating new state
+  Now: 2026-10-30 18:12
+  Last rotated at 2026-10-30 18:00
+  log does not need rotating (log has already been rotated)
+not running postrotate script, since no logs were rotated
+switching euid from 100 to 0 and egid from 4 to 0 (pid 5743)
+
+---------- [8] Final status ----------
+rsyslog service : active
+rsyslog on boot : enabled
+Port 514       : 4 socket(s) listening (expect 4: UDP+TCP, IPv4+IPv6)
+Firewall        : Status: active
+Allowed to 514  : 192.168.153.11 only
+Remote logs     : /var/log/remote/<hostname>/<hostname>.log
+Log rotation    : daily, 7 kept (/etc/logrotate.d/remote)
+Setup log       : /var/log/logserver_setup.log
+
+==================================================
+ LogServer setup finished: Fri Oct 30 06:12:57 PM +03 2026
+==================================================
+==================================================
+ LogServer setup started: Fri Oct 30 06:13:47 PM +03 2026
+ Host: alpha
+==================================================
+
+---------- [1] Install rsyslog, ufw and logrotate ----------
+Reading package lists...
+Building dependency tree...
+Reading state information...
+rsyslog is already the newest version (8.2512.0-1ubuntu4.2).
+ufw is already the newest version (0.36.2-9build1).
+logrotate is already the newest version (3.22.0-1build1).
+Solving dependencies...
+0 upgraded, 0 newly installed, 0 to remove and 70 not upgraded.
+
+---------- [2] Create directory for remote logs: /var/log/remote ----------
+drwxr-xr-x 3 syslog adm 4096 Oct 30 18:12 /var/log/remote
+
+---------- [3] Configure rsyslog to listen on UDP and TCP port 514 ----------
+Wrote /etc/rsyslog.d/10-remote.conf:
+# Managed by LogServer.sh - central log server (task)
+module(load="imudp")
+module(load="imtcp")
+input(type="imudp" port="514" ruleset="remote")
+input(type="imtcp" port="514" ruleset="remote")
+# One folder and one file per sending host
+template(name="RemotePerHost" type="string"
+         string="/var/log/remote/%HOSTNAME%/%HOSTNAME%.log")
+ruleset(name="remote") {
+    action(type="omfile" dynaFile="RemotePerHost"
+           createDirs="on" dirCreateMode="0755"
+           fileCreateMode="0640" fileOwner="syslog" fileGroup="adm")
+    stop
+}
+Validating rsyslog configuration...
+rsyslogd: version 8.2512.0, config validation run (level 1), master config /etc/rsyslog.conf
+rsyslogd: End of config validation run. Bye.
+active
+
+---------- [4] Configure UFW firewall ----------
+Skipping adding existing rule
+Skipping adding existing rule (v6)
+Skipping adding existing rule
+Skipping adding existing rule
+Skipping adding existing rule
+Skipping adding existing rule
+Skipping adding existing rule (v6)
+Firewall is active and enabled on system startup
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW IN    Anywhere                   # SSH
+514/udp                    ALLOW IN    192.168.153.11             # syslog UDP from BETA
+514/tcp                    ALLOW IN    192.168.153.11             # syslog TCP from BETA
+514                        ALLOW IN    127.0.0.1                  # Local loopback test traffic
+80/tcp                     ALLOW IN    Anywhere                   # HTTP
+22/tcp (v6)                ALLOW IN    Anywhere (v6)              # SSH
+80/tcp (v6)                ALLOW IN    Anywhere (v6)              # HTTP
+
+
+---------- [5] Verify rsyslog is listening on port 514 ----------
+udp   UNCONN 0      0                               0.0.0.0:514        0.0.0.0:*    users:(("rsyslogd",pid=6034,fd=6))                     
+udp   UNCONN 0      0                                  [::]:514           [::]:*    users:(("rsyslogd",pid=6034,fd=7))                     
+tcp   LISTEN 0      25                              0.0.0.0:514        0.0.0.0:*    users:(("rsyslogd",pid=6034,fd=8))                     
+tcp   LISTEN 0      25                                 [::]:514           [::]:*    users:(("rsyslogd",pid=6034,fd=9))                     
+OK: rsyslog is listening on port 514
+
+---------- [6] Test with logger (send to ourselves over the network) ----------
+OK: test messages written to /var/log/remote/alpha/alpha.log
+2026-10-30T18:13:52.330845+03:00 alpha root LogServerTest-1793373232 UDP test message from alpha
+2026-10-30T18:13:52.335580+03:00 alpha root LogServerTest-1793373232 TCP test message from alpha
+Current contents of /var/log/remote:
+/var/log/remote:
+total 4
+drwxr-xr-x 2 syslog syslog 4096 Oct 30 18:12 alpha
+
+/var/log/remote/alpha:
+total 4
+-rw-r----- 1 syslog adm 388 Oct 30 18:13 alpha.log
+
+---------- [7] Configure log rotation: /etc/logrotate.d/remote ----------
+Wrote /etc/logrotate.d/remote:
+# Managed by LogServer.sh - rotation for remote host logs
+/var/log/remote/*/*.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    su syslog adm
+    create 0640 syslog adm
+    sharedscripts
+    # Postrotate block must reside INSIDE the closing brace of the directive block
+    # otherwise logrotate throws a syntax error and fails to reload rsyslog.
+    postrotate
+        /usr/lib/rsyslog/rsyslog-rotate 2>/dev/null || systemctl kill -s HUP rsyslog.service
+    endscript
+}
+Checking logrotate configuration (dry run)...
+Creating new state
+Creating new state
+Creating new state
+
+Handling 1 logs
+
+rotating pattern: /var/log/remote/*/*.log after 1 days empty log files are not rotated, (7 rotations), old logs are removed
+switching euid from 0 to 100 and egid from 0 to 4 (pid 6222)
+considering log /var/log/remote/alpha/alpha.log
+Creating new state
+  Now: 2026-10-30 18:13
+  Last rotated at 2026-10-30 18:00
+  log does not need rotating (log has already been rotated)
+not running postrotate script, since no logs were rotated
+switching euid from 100 to 0 and egid from 4 to 0 (pid 6222)
+
+---------- [8] Final status ----------
+rsyslog service : active
+rsyslog on boot : enabled
+Port 514       : 4 socket(s) listening (expect 4: UDP+TCP, IPv4+IPv6)
+Firewall        : Status: active
+Allowed to 514  : 192.168.153.11 only
+Remote logs     : /var/log/remote/<hostname>/<hostname>.log
+Log rotation    : daily, 7 kept (/etc/logrotate.d/remote)
+Setup log       : /var/log/logserver_setup.log
+
+==================================================
+ LogServer setup finished: Fri Oct 30 06:13:54 PM +03 2026
+==================================================
