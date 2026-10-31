@@ -4,6 +4,21 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+/*
+
+Command line arguments:
+
+1: file to create
+2: file to delete
+3: file to copy (source)
+4: destination
+5: file to display information
+6: word to search
+7: file to search
+8: directory to list contents
+
+*/
+
 int main(int argc, char const *argv[])
 {
     // divide by 4 since the number of threads is returned, not core count (usually 2 threads per core)
