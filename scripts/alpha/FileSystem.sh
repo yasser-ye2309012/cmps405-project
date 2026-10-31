@@ -1,12 +1,20 @@
 function f1() {
-    du -sh /home | sort -hr > /tmp/Disk_Usage.txt
+    # disk usage of home directory in KB and reverse sort
+    du -s /home | sort -hr > /tmp/Disk_Usage.txt
+
+    # cpu info
     lscpu | grep -E "(Model name:|Vendor ID:|^CPU\(s\):|Architecture:)" > /tmp/cpu_info.txt
+    
+    # all kernel info
     dmesg | grep -E "(Memory|RAM|mem|memory|Out of memory|oom|swap|page allocation|sd[a-z]|sata|scsi|nvme|disk|block)" > /tmp/Messages_Log.txt
+    
+    # kernel messsages count
     echo 'Memory lines: ' | cat >> /tmp/Message_count.txt
     grep -E "(Memory|RAM|mem|memory|Out of memory|oom|swap|page allocation)" < /tmp/Messages_Log.txt | wc -l | cat > /tmp/Message_count.txt
     echo 'v Disk lines: ' | cat >> /tmp/Message_count.txt
     grep -E "(sd[a-z]|sata|scsi|nvme|disk|block)" < /tmp/Messages_Log.txt | wc -l | cat >> /tmp/Message_count.txt
 
+    # compression
     timestamp=$(date +%d%H%M%S)
     backup_dir="$HOME/backup-f1/$timestamp"
     mkdir -p "$backup_dir"
@@ -56,11 +64,12 @@ function f2() {
 }
 
 function f3() {
+    # verification and reporting
     all_files=$(find ~/backup-f2/ -type f | wc -l)
     valid_files=$(find ~/backup-f2/ -type f -exec ls -la {} + | grep -E '^-r--------' | wc -l) || return 1
     echo "Number of files backed up: $all_files"
     echo "Size of backup directory: $(du -sh ~/backup-f2/ | awk '{print $1}')" 
-    echo "Number of files not matching permission requirement: $((all_files - valid_files))"
+    echo "Number of files not matching permission requirement (errors): $((all_files - valid_files))"
 
     echo "End of execution, time: $(date +%H:%M:%S)"
 }
